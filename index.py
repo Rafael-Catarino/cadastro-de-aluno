@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from student import Student
-from database.banco_de_dados import *
+from database.database import *
 
 
 color = "#dde"
@@ -93,12 +93,12 @@ def get_new_data():
 def update_student():
     new_data = get_new_data()
     data_student = get_data_student()
-    new_student=[]
+    new_student = []
     for i in range(0, 6):
         if new_data[i] == "":
-            i+=1
+            i += 1
             new_student.append(data_student[i])
-            i-=1
+            i -= 1
         else:
             new_student.append(new_data[i])
     update_student_database(new_student, data_student[0])
@@ -144,7 +144,8 @@ def update_treview():
         tv.insert(
             "",
             "end",
-            values=(i[0], i[1], i[2], i[3], i[4], i[5], i[6], average, situation),
+            values=(i[0], i[1], i[2], i[3], i[4],
+                    i[5], i[6], average, situation),
         )
 
 
