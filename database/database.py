@@ -41,9 +41,11 @@ create_table_database()
 #### - Inserindo na Tabela - ####
 def insert_students_database(student: Student):
     connection = database_connection()
-    code_sql = "INSERT INTO student(s_nome_aluno, i_matricula_aluno, f_nota1_aluno, f_nota2_aluno, f_nota3_aluno, f_nota4_aluno)VALUES('"+student.name+"', '"+student.registration+"', '"+student.note1+"', '"+student.note2+"', '"+student.note3+"', '"+student.note4+"');"
+    code_sql = "INSERT INTO student(s_nome_aluno, i_matricula_aluno, f_nota1_aluno, f_nota2_aluno, f_nota3_aluno, f_nota4_aluno)VALUES('" + \
+        student.name+"', '"+student.registration+"', '"+student.note1+"', '" + \
+        student.note2+"', '"+student.note3+"', '"+student.note4+"');"
     try:
-        c=connection.cursor()
+        c = connection.cursor()
         c.execute(code_sql)
         connection.commit()
     except Error as erro:
@@ -55,7 +57,7 @@ def delete_student_database(id):
     connection = database_connection()
     sql_code = "DELETE FROM student WHERE i_id_aluno='"+id+"';"
     try:
-        c=connection.cursor()
+        c = connection.cursor()
         c.execute(sql_code)
         connection.commit()
     except Error as erro:
@@ -66,16 +68,18 @@ def delete_student_database(id):
 def select_student_database():
     connection = database_connection()
     sql_code = "SELECT * FROM student"
-    c=connection.cursor()
+    c = connection.cursor()
     c.execute(sql_code)
-    result=c.fetchall()
+    result = c.fetchall()
     return result
 
 
 #### - ATUALIZAR OS DADOS NO BANCO - ####
 def update_student_database(student, id):
     connection = database_connection()
-    sql_code = "UPDATE student SET s_nome_aluno='"+student[0]+"', i_matricula_aluno='"+student[1]+"', f_nota1_aluno='"+student[2]+"', f_nota2_aluno='"+student[3]+"', f_nota3_aluno='"+student[4]+"', f_nota4_aluno='"+student[5]+"' WHERE i_id_aluno='"+id+"'"
+    sql_code = "UPDATE student SET s_nome_aluno='"+student[0]+"', i_matricula_aluno='"+student[1]+"', f_nota1_aluno='"+student[2] + \
+        "', f_nota2_aluno='"+student[3]+"', f_nota3_aluno='"+student[4] + \
+        "', f_nota4_aluno='"+student[5]+"' WHERE i_id_aluno='"+id+"'"
     try:
         c = connection.cursor()
         c.execute(sql_code)
