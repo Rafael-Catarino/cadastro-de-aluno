@@ -155,35 +155,35 @@ frame1.place(x=10, y=10, width=504, height=230)
 
 Label(frame1, text="Cadastrar Alunos", height=2, font=("Arial 13 bold")).pack()
 
-Label(frame1, text="Nome:", width=8, anchor=W).place(x=20, y=50)
-entry_name = Entry(frame1, width=25)
-entry_name.place(x=20, y=70)
+Label(frame1, text="Nome:", width=8, anchor=W).place(x=38, y=50)
+entry_name = Entry(frame1, width=28)
+entry_name.place(x=38, y=70)
 
-Label(frame1, text="Matricula:", width=8, anchor=W).place(x=20, y=100)
-entry_mat = Entry(frame1, width=25)
-entry_mat.place(x=20, y=120)
+Label(frame1, text="Matricula:", width=8, anchor=W).place(x=38, y=100)
+entry_mat = Entry(frame1, width=28)
+entry_mat.place(x=38, y=120)
 
-Label(frame1, text="1ª Nota:", width=8, anchor=W).place(x=20, y=150)
+Label(frame1, text="1ª Nota:", width=8, anchor=W).place(x=38, y=150)
 entry_note1 = Entry(frame1, width=8)
-entry_note1.place(x=20, y=170)
+entry_note1.place(x=38, y=170)
 
-Label(frame1, text="2ª Nota:", width=8, anchor=W).place(x=110, y=150)
+Label(frame1, text="2ª Nota:", width=8, anchor=W).place(x=158, y=150)
 entry_note2 = Entry(frame1, width=8)
-entry_note2.place(x=110, y=170)
+entry_note2.place(x=158, y=170)
 
-Label(frame1, text="3ª Nota:", width=8, anchor=W).place(x=200, y=150)
+Label(frame1, text="3ª Nota:", width=8, anchor=W).place(x=279, y=150)
 entry_note3 = Entry(frame1, width=8)
-entry_note3.place(x=200, y=170)
+entry_note3.place(x=279, y=170)
 
-Label(frame1, text="4ª Nota:", width=8, anchor=W).place(x=290, y=150)
+Label(frame1, text="4ª Nota:", width=8, anchor=W).place(x=400, y=150)
 entry_note4 = Entry(frame1, width=8)
-entry_note4.place(x=290, y=170)
+entry_note4.place(x=400, y=170)
 
-Button(frame1, text="SALVAR", command=include).place(x=200, y=60)
+Button(frame1, text="SALVAR", command=include).place(x=279, y=60)
 
-Button(frame1, text="ATERAR", command=update_student).place(x=290, y=60)
+Button(frame1, text="ATERAR", command=update_student).place(x=400, y=60)
 
-Button(frame1, text="DELETAR", command=delete_student).place(x=285, y=110)
+Button(frame1, text="DELETAR", command=delete_student).place(x=395, y=110)
 
 frame2 = Frame(window, borderwidth=1, relief="solid")
 frame2.place(x=10, y=250, width=504, height=230)
