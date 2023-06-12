@@ -1,9 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from student import Student
 from database.database import *
-
 
 color = "#dde"
 
@@ -15,7 +13,16 @@ window.wm_maxsize(width=524, height=490)
 window.wm_minsize(width=524, height=490)
 
 
-#### -- SALVAR NO BANCO DE DADOS -- ####
+def delet_data_entry():
+    entry_name.delete(0, END)
+    entry_mat.delete(0, END)
+    entry_note1.delete(0, END)
+    entry_note2.delete(0, END)
+    entry_note3.delete(0, END)
+    entry_note4.delete(0, END)
+
+
+# -- SALVAR NO BANCO DE DADOS -- #
 def include():
     name = entry_name.get().upper()
     mat = entry_mat.get()
@@ -24,28 +31,23 @@ def include():
     note3 = entry_note3.get()
     note4 = entry_note4.get()
     if (
-        name != ""
-        and mat != ""
-        and note1 != ""
-        and note2 != ""
-        and note3 != ""
-        and note4 != ""
+            name != ""
+            and mat != ""
+            and note1 != ""
+            and note2 != ""
+            and note3 != ""
+            and note4 != ""
     ):
         if (
-            (float(note1) <= 10)
-            and (float(note2) <= 10)
-            and (float(note3) <= 10)
-            and (float(note4) <= 10)
+                (float(note1) <= 10)
+                and (float(note2) <= 10)
+                and (float(note3) <= 10)
+                and (float(note4) <= 10)
         ):
             student = Student(mat, name, note1, note2, note3, note4)
             insert_students_database(student)
             update_treview()
-            entry_name.delete(0, END)
-            entry_mat.delete(0, END)
-            entry_note1.delete(0, END)
-            entry_note2.delete(0, END)
-            entry_note3.delete(0, END)
-            entry_note4.delete(0, END)
+            delet_data_entry()
         else:
             messagebox.showinfo(
                 title="Nota invalido",
@@ -57,7 +59,7 @@ def include():
         )
 
 
-#### -------- ATERAR VALOR -------- ####
+# -------- ATERAR VALOR -------- #
 def get_data_student():
     try:
         select_student = tv.selection()[0]
@@ -69,6 +71,18 @@ def get_data_student():
         )
 
 
+def fills_in_the_entry():
+    delet_data_entry()
+    data_student = tv.focus()
+    value = tv.item(data_student, "values")
+    entry_name.insert(0, value[0])
+    entry_mat.insert(0, value[1])
+    entry_note1.insert(0, value[2])
+    entry_note2.insert(0, value[3])
+    entry_note3.insert(0, value[4])
+    entry_note4.insert(0, value[5])
+
+
 def get_new_data():
     try:
         name = entry_name.get().upper()
@@ -77,12 +91,7 @@ def get_new_data():
         note2 = entry_note2.get()
         note3 = entry_note3.get()
         note4 = entry_note4.get()
-        entry_name.delete(0, END)
-        entry_mat.delete(0, END)
-        entry_note1.delete(0, END)
-        entry_note2.delete(0, END)
-        entry_note3.delete(0, END)
-        entry_note4.delete(0, END)
+        delet_data_entry()
         return [name, mat, note1, note2, note3, note4]
     except:
         messagebox.showinfo(
@@ -96,29 +105,28 @@ def update_student():
     new_student = []
     for i in range(0, 6):
         if new_data[i] == "":
-            i += 1
             new_student.append(data_student[i])
-            i -= 1
         else:
             new_student.append(new_data[i])
-    update_student_database(new_student, data_student[0])
+    update_student_database(new_student, data_student[1])
     update_treview()
 
 
-#### -------- DELETAR ALUNO ------- ####
+# -------- DELETAR ALUNO ------- #
 def delete_student():
     try:
         selected_student = tv.selection()[0]
         value = tv.item(selected_student, "values")
         tv.delete(selected_student)
-        delete_student_database(value[0])
+        delete_student_database(value[1])
+        delet_data_entry()
     except:
         messagebox.showinfo(
             title="Aluno não foi informado", message="Favor selecionar um aluno"
         )
 
 
-#### --- MOSTRAR CONTEUDO SALVO --- ####
+# --- MOSTRAR CONTEUDO SALVO --- #
 def calculate_the_average(note1, note2, note3, note4):
     return (note1 + note2 + note3 + note4) / 4
 
@@ -139,21 +147,21 @@ def update_treview():
     clear_treview()
     arr_students = select_student_database()
     for i in arr_students:
-        average = calculate_the_average(i[3], i[4], i[5], i[6])
+        average = calculate_the_average(i[2], i[3], i[4], i[5])
         situation = student_situation(average)
         tv.insert(
             "",
             "end",
             values=(i[0], i[1], i[2], i[3], i[4],
-                    i[5], i[6], average, situation),
+                    i[5], average, situation),
         )
 
 
-#### -------- TELA TEKINTER ------- ####
+# -------- TELA TEKINTER ------- #
 frame1 = Frame(window, borderwidth=1, relief="solid")
 frame1.place(x=10, y=10, width=504, height=230)
 
-Label(frame1, text="Cadastrar Alunos", height=2, font=("Arial 13 bold")).pack()
+Label(frame1, text="Cadastrar Alunos", height=2, font="Arial 13 bold").pack()
 
 Label(frame1, text="Nome:", width=8, anchor=W).place(x=38, y=50)
 entry_name = Entry(frame1, width=28)
@@ -186,12 +194,16 @@ Button(frame1, text="ATERAR", command=update_student).place(x=400, y=60)
 Button(frame1, text="DELETAR", command=delete_student).place(x=395, y=110)
 
 frame2 = Frame(window, borderwidth=1, relief="solid")
-frame2.place(x=10, y=250, width=504, height=230)
+frame2.place(x=10, y=250, width=504, height=228)
+
+scrollbar = Scrollbar(frame2)
+scrollbar.pack(side="right", fill="y")
+
+canvas = Canvas(frame2, )
 
 tv = ttk.Treeview(
     frame2,
     columns=(
-        "id",
         "nome",
         "matricula",
         "1ª nota",
@@ -202,8 +214,8 @@ tv = ttk.Treeview(
         "aprov/reprov",
     ),
     show="headings",
+    yscrollcommand=scrollbar.set
 )
-tv.column("id", minwidth=0, width=20)
 tv.column("nome", minwidth=0, width=70)
 tv.column("matricula", minwidth=0, width=90)
 tv.column("1ª nota", minwidth=0, width=60)
@@ -212,7 +224,6 @@ tv.column("3ª nota", minwidth=0, width=60)
 tv.column("4ª nota", minwidth=0, width=60)
 tv.column("media", minwidth=0, width=50)
 tv.column("aprov/reprov", minwidth=0, width=30)
-tv.heading("id", text="ID")
 tv.heading("nome", text="NOME")
 tv.heading("matricula", text="MATRICULA")
 tv.heading("1ª nota", text="1ª NOTA")
@@ -221,8 +232,11 @@ tv.heading("3ª nota", text="3ª NOTA")
 tv.heading("4ª nota", text="4ª NOTA")
 tv.heading("media", text="MEDIA")
 tv.heading("aprov/reprov", text="A/R")
-tv.pack()
+tv.pack(side="left", fill="both")
 
+scrollbar.config(command=tv.yview)
+
+tv.bind("<Double-1>", fills_in_the_entry)
 
 update_treview()
 
