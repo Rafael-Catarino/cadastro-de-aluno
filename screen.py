@@ -7,13 +7,13 @@ color = "#dde"
 
 window = Tk()
 window.title("Cadastro de Alunos")
-window.geometry("524x490")
+window.geometry("551x490")
 window.config(bg=color)
-window.wm_maxsize(width=524, height=490)
-window.wm_minsize(width=524, height=490)
+window.wm_maxsize(width=551, height=490)
+window.wm_minsize(width=551, height=490)
 
 
-def delet_data_entry():
+def delete_data_entry():
     entry_name.delete(0, END)
     entry_mat.delete(0, END)
     entry_note1.delete(0, END)
@@ -47,7 +47,7 @@ def include():
             student = Student(mat, name, note1, note2, note3, note4)
             insert_students_database(student)
             update_treview()
-            delet_data_entry()
+            delete_data_entry()
         else:
             messagebox.showinfo(
                 title="Nota invalido",
@@ -65,38 +65,33 @@ def get_data_student():
         select_student = tv.selection()[0]
         value = tv.item(select_student, "values")
         return value
-    except:
+    except IndexError:
         messagebox.showinfo(
             title="Aluno não foi informado", message="Favor selecionar um aluno"
         )
 
 
-def fills_in_the_entry():
-    delet_data_entry()
+def fills_in_the_entry(a):
+    delete_data_entry()
     data_student = tv.focus()
     value = tv.item(data_student, "values")
-    entry_name.insert(0, value[0])
-    entry_mat.insert(0, value[1])
-    entry_note1.insert(0, value[2])
-    entry_note2.insert(0, value[3])
-    entry_note3.insert(0, value[4])
-    entry_note4.insert(0, value[5])
+    entry_name.insert(0, value[1])
+    entry_mat.insert(0, value[2])
+    entry_note1.insert(0, value[3])
+    entry_note2.insert(0, value[4])
+    entry_note3.insert(0, value[5])
+    entry_note4.insert(0, value[6])
 
 
 def get_new_data():
-    try:
-        name = entry_name.get().upper()
-        mat = entry_mat.get()
-        note1 = entry_note1.get()
-        note2 = entry_note2.get()
-        note3 = entry_note3.get()
-        note4 = entry_note4.get()
-        delet_data_entry()
-        return [name, mat, note1, note2, note3, note4]
-    except:
-        messagebox.showinfo(
-            title="Novo dado não foi informado", message="Favor informar o que deseja trocar do aluno selecionado aluno"
-        )
+    name = entry_name.get().upper()
+    mat = entry_mat.get()
+    note1 = entry_note1.get()
+    note2 = entry_note2.get()
+    note3 = entry_note3.get()
+    note4 = entry_note4.get()
+    delete_data_entry()
+    return [name, mat, note1, note2, note3, note4]
 
 
 def update_student():
@@ -108,7 +103,7 @@ def update_student():
             new_student.append(data_student[i])
         else:
             new_student.append(new_data[i])
-    update_student_database(new_student, data_student[1])
+    update_student_database(new_student, data_student[0])
     update_treview()
 
 
@@ -118,9 +113,9 @@ def delete_student():
         selected_student = tv.selection()[0]
         value = tv.item(selected_student, "values")
         tv.delete(selected_student)
-        delete_student_database(value[1])
-        delet_data_entry()
-    except:
+        delete_student_database(value[0])
+        delete_data_entry()
+    except IndexError:
         messagebox.showinfo(
             title="Aluno não foi informado", message="Favor selecionar um aluno"
         )
@@ -147,19 +142,19 @@ def update_treview():
     clear_treview()
     arr_students = select_student_database()
     for i in arr_students:
-        average = calculate_the_average(i[2], i[3], i[4], i[5])
+        average = calculate_the_average(i[3], i[4], i[5], i[6])
         situation = student_situation(average)
         tv.insert(
             "",
             "end",
-            values=(i[0], i[1], i[2], i[3], i[4],
-                    i[5], average, situation),
+            values=(i[0], i[1], i[2], i[3], i[4], i[5],
+                    i[6], average, situation),
         )
 
 
 # -------- TELA TEKINTER ------- #
 frame1 = Frame(window, borderwidth=1, relief="solid")
-frame1.place(x=10, y=10, width=504, height=230)
+frame1.place(x=10, y=10, width=531, height=230)
 
 Label(frame1, text="Cadastrar Alunos", height=2, font="Arial 13 bold").pack()
 
@@ -194,16 +189,15 @@ Button(frame1, text="ATERAR", command=update_student).place(x=400, y=60)
 Button(frame1, text="DELETAR", command=delete_student).place(x=395, y=110)
 
 frame2 = Frame(window, borderwidth=1, relief="solid")
-frame2.place(x=10, y=250, width=504, height=228)
+frame2.place(x=10, y=250, width=531, height=228)
 
 scrollbar = Scrollbar(frame2)
 scrollbar.pack(side="right", fill="y")
 
-canvas = Canvas(frame2, )
-
 tv = ttk.Treeview(
     frame2,
     columns=(
+        "id",
         "nome",
         "matricula",
         "1ª nota",
@@ -216,6 +210,7 @@ tv = ttk.Treeview(
     show="headings",
     yscrollcommand=scrollbar.set
 )
+tv.column("id", minwidth=0, width=30)
 tv.column("nome", minwidth=0, width=70)
 tv.column("matricula", minwidth=0, width=90)
 tv.column("1ª nota", minwidth=0, width=60)
@@ -224,6 +219,7 @@ tv.column("3ª nota", minwidth=0, width=60)
 tv.column("4ª nota", minwidth=0, width=60)
 tv.column("media", minwidth=0, width=50)
 tv.column("aprov/reprov", minwidth=0, width=30)
+tv.heading("id", text="ID")
 tv.heading("nome", text="NOME")
 tv.heading("matricula", text="MATRICULA")
 tv.heading("1ª nota", text="1ª NOTA")
