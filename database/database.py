@@ -19,8 +19,9 @@ def database_connection():
 # - Criação da tabela - #
 def create_table_database():
     comand_sql = """CREATE TABLE IF NOT EXISTS student (
+    i_id_aluno        INTEGER PRIMARY KEY,
     s_nome_aluno      VARCHAR(50)    NOT NULL,
-    i_matricula_aluno INTEGER UNIQUE NOT NULL PRIMARY KEY,
+    i_matricula_aluno INTEGER UNIQUE NOT NULL,
     f_nota1_aluno     NUMERIC NOT NULL,
     f_nota2_aluno     NUMERIC NOT NULL,
     f_nota3_aluno     NUMERIC NOT NULL,
@@ -52,9 +53,9 @@ def insert_students_database(student: Student):
 
 
 # - DELETANDO ALUNO - #
-def delete_student_database(average):
+def delete_student_database(id):
     connection = database_connection()
-    sql_code = "DELETE FROM student WHERE i_matricula_aluno='" + average + "';"
+    sql_code = "DELETE FROM student WHERE i_id_aluno='" + id + "';"
     try:
         c = connection.cursor()
         c.execute(sql_code)
@@ -74,11 +75,11 @@ def select_student_database():
 
 
 # - ATUALIZAR OS DADOS NO BANCO - #
-def update_student_database(student, average):
+def update_student_database(student, id):
     connection = database_connection()
     sql_code = "UPDATE student SET s_nome_aluno='" + student[0] + "', i_matricula_aluno='" + student[
         1] + "', f_nota1_aluno='" + student[2] + "', f_nota2_aluno='" + student[3] + "', f_nota3_aluno='" + student[
-        4] + "', f_nota4_aluno='" + student[5] + "' WHERE i_matricula_aluno='" + average + "'"
+        4] + "', f_nota4_aluno='" + student[5] + "' WHERE i_id_aluno='" + id + "'"
     try:
         c = connection.cursor()
         c.execute(sql_code)
